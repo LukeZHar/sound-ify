@@ -1,4 +1,53 @@
-export const getAdmin = (req, res) => {
-    // Logic to retrieve admin details from the database
-    res.send('Retrieve admin details');
-}
+import Song from "../models/song.model.js";
+import Album from "../models/album.model.js";
+import cloudinary from "../lib/cloudinary.js";
+
+// helper function to upload files to Cloudinary
+const uploadToCloudinary = async (file) => {
+  try {
+    const result = await cloudinary.uploader.upload(file.tempFilePath, {
+      resource_type: "auto",
+    });
+    return result.secure_url;
+  } catch (error) {
+    console.log("Cloudinary upload error:", error);
+    throw new Error(error);
+  }
+};
+
+export const createSong = async (req, res, next) => {
+  try {
+    if (!req.files || !req.files.audioFile || !req.files.imageFile) {
+      return res.status(400).json({ message: "All files are required." });
+    }
+    const { title, artist, albumId, duration } = req.body;
+    const audioFile = req.files.audioFile;
+    const imageFile = req.files.imageFile;
+
+    // Upload audio file to Cloudinary
+    const audioUrl = await uploadToCloudinary(audioFile);
+    // Upload image file to Cloudinary
+    const imageUrl = await uploadToCloudinary(imageFile);
+
+    const song = new Song({
+      title,
+      artist,
+      audioUrl,
+      imageUrl,
+      duration,
+      albumId: albumId || null,
+    });
+    await song.save();
+
+    // If the song is associated with an album, update the album's song list
+    if (albumId) {
+      await Album.findByIdAndUpdate(albumId, {
+        $push: { songs: song._id },
+      });
+    }
+    res.status(201).json({ message: "Song created successfully", song });
+  } catch (error) {
+    console.log("Error creating song:", error);
+    next(error);
+  }
+};
