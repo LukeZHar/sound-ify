@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import dbConnect from "./lib/db.js";
+import { clerkMiddleware } from "@clerk/express";
 
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
@@ -17,6 +18,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json()); // Middleware to parse JSON request bodies
+app.use(clerkMiddleware()) // This will add Clerk authentication to req obj 
 
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
