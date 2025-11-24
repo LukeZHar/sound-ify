@@ -53,3 +53,5 @@ app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
   dbConnect();
 });
+
+// TODO: Socket.io integration for real-time features
