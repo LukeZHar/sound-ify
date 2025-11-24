@@ -19,7 +19,12 @@ const __dirname = path.resolve();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors()); // Enable CORS for all routes
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+); // Enable CORS for all routes
 app.use(express.json()); // Middleware to parse JSON request bodies
 app.use(clerkMiddleware()); // This will add Clerk authentication to req obj
 
