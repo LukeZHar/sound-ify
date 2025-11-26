@@ -1,9 +1,11 @@
 import { Route, Routes } from "react-router-dom";
+import { AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
+
 import HomePage from "./pages/HomePage.tsx";
 import AuthCallbackPage from "./pages/AuthCallbackPage.tsx";
-import { AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
 import MainLayout from "./layout/MainLayout.tsx";
 import ChatPage from "./pages/ChatPage.tsx";
+import AlbumPage from "./pages/AlbumPage.tsx";
 
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/chat" element={<ChatPage />} />
+          <Route path="/albums/:albumId" element={<AlbumPage />} />
         </Route>
       </Routes>
     </>
