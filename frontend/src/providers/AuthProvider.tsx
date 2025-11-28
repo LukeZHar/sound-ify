@@ -2,6 +2,7 @@ import { axiosInstance } from "@/lib/axios";
 import { useAuth } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { Loader } from "lucide-react";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 const updateApiToken = (token: string | null) => {
   if (token)
@@ -12,12 +13,16 @@ const updateApiToken = (token: string | null) => {
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { getToken } = useAuth();
   const [loading, setLoading] = useState(true);
+  const { checkAdminStatus } = useAuthStore();
 
   useEffect(() => {
     const initAuth = async () => {
       try {
         const token = await getToken();
         updateApiToken(token);
+        if (token) {
+          await checkAdminStatus();
+        }
       } catch (error: any) {
         updateApiToken(null);
         console.log("Error fetching auth token:", error);
@@ -26,7 +31,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
     initAuth();
-  }, [getToken]);
+  }, [getToken, checkAdminStatus]);
 
   if (loading)
     return (
