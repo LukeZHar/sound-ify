@@ -5,6 +5,12 @@ import { Clock, Play } from "lucide-react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
+const formatDuration = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+};
+
 const AlbumPage = () => {
   const { albumId } = useParams();
   const { fetchAlbumById, currentAlbum, isLoading } = useMusicStore();
@@ -80,7 +86,25 @@ const AlbumPage = () => {
                         <span className="group-hover:hidden">{index + 1}</span>
                         <Play className="size-4 hidden group-hover:block" />
                       </div>
-                      <div></div>
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={song.imageUrl}
+                          alt={song.title}
+                          className="size-10"
+                        />
+                        <div>
+                          <div className="font-medium text-white">
+                            {song.title}
+                          </div>
+                          <div>{song.artist}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center">
+                        {song.createdAt.split("T")[0]}
+                      </div>
+                      <div className="flex items-center">
+                        {formatDuration(song.duration)}
+                      </div>
                     </div>
                   ))}
                 </div>
