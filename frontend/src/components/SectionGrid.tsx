@@ -37,6 +37,8 @@ const SectionGrid = ({ title, songs, isLoading }: SectionGridProps) => {
                 />
               </div>
             </div>
+            <h3 className="font-medium mb-2 truncate">{song.title}</h3>
+            <p className="text-sm text-zinc-400 truncate">{song.artist}</p>
           </div>
         ))}
       </div>
