@@ -25,8 +25,23 @@ const AudioPlayer = () => {
     return () => {
       audio?.removeEventListener("ended", handleEnded);
     };
-  }, [currentSong, playNext]);
-  
+  }, [playNext]);
+
+  // Handle song changes
+  useEffect(() => {
+    if (!audioRef.current || !currentSong) return;
+    const audio = audioRef.current;
+    // Check if the song has changed
+    const isSongChange = prevSongRef.current !== currentSong?.audioUrl;
+    if (isSongChange) {
+      audio.src = currentSong?.audioUrl;
+      // Reset the playback position
+      audio.currentTime = 0;
+      prevSongRef.current = currentSong?.audioUrl;
+      if (isPlaying) audio.play();
+    }
+  }, [currentSong, isPlaying]);
+
   return <audio ref={audioRef} />;
 };
 
