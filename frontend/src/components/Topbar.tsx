@@ -21,8 +21,8 @@ const Topbar = () => {
             to={"/admin"}
             className={cn(buttonVariants({ variant: "outline" }))}
           >
-            <LayoutDashboardIcon className="size-4 mr-2" />
-            Admin Dashboard
+            <LayoutDashboardIcon className="size-4 md:mr-2" />
+            <p className="hidden md:block">Admin Dashboard</p>
           </Link>
         )}
 
