@@ -6,6 +6,7 @@ import AuthCallbackPage from "./pages/AuthCallbackPage.tsx";
 import MainLayout from "./layout/MainLayout.tsx";
 import ChatPage from "./pages/ChatPage.tsx";
 import AlbumPage from "./pages/AlbumPage.tsx";
+import AdminPage from "./pages/AdminPage.tsx";
 
 function App() {
   return (
@@ -20,6 +21,8 @@ function App() {
           }
         />
         <Route path="/auth-callback" element={<AuthCallbackPage />} />
+        <Route path="/admin" element={<AdminPage />} />
+
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/chat" element={<ChatPage />} />
