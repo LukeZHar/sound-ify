@@ -1,5 +1,6 @@
 import { useMusicStore } from "@/stores/useMusicStore";
 import { Library, ListMusic, PlayCircle, Users2 } from "lucide-react";
+import StatsCard from "./StatsCard";
 
 const DashboardStats = () => {
   const { stats } = useMusicStore();
@@ -37,7 +38,16 @@ const DashboardStats = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-      DashboardStats
+      {statsData.map((stat) => (
+        <StatsCard 
+          key={stat.label}
+          icon={stat.icon}
+          label={stat.label}
+          value={stat.value}
+          bgColor={stat.bgColor}
+          iconColor={stat.iconColor}
+        />
+      ))}
     </div>
   );
 };
