@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -18,17 +19,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import toast from "react-hot-toast";
+import { axiosInstance } from "@/lib/axios";
+
+interface NewSong {
+  title: string;
+  artist: string;
+  album: string;
+  duration: string;
+}
 
 const AddSongDialog = () => {
   const { albums } = useMusicStore();
   const [songDialogOpen, setSongDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [newSong, setNewSong] = useState({
+  const [newSong, setNewSong] = useState<NewSong>({
     title: "",
     artist: "",
     album: "",
-    duration: 0,
+    duration: "0",
   });
 
   const [files, setFiles] = useState<{
@@ -42,7 +52,47 @@ const AddSongDialog = () => {
   const audioInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      if (!files.audio || !files.image) {
+        return toast.error("Please upload both audio and image files.");
+      }
+
+      const formData = new FormData();
+
+      formData.append("title", newSong.title);
+      formData.append("artist", newSong.artist);
+      formData.append("duration", newSong.duration.toString());
+      if (newSong.album && newSong.album !== "none") {
+        formData.append("albumId", newSong.album);
+      }
+      formData.append("audioFile", files.audio);
+      formData.append("imageFile", files.image);
+
+      await axiosInstance.post("/admin/songs", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      setNewSong({
+        title: "",
+        artist: "",
+        album: "",
+        duration: "0",
+      });
+
+      setFiles({ audio: null, image: null });
+
+      toast.success("Song added successfully!");
+      setSongDialogOpen(false);
+      setIsLoading(false);
+    } catch (error: any) {
+      toast.error("Failed to add song. Please try again." + error.message);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Dialog open={songDialogOpen} onOpenChange={setSongDialogOpen}>
@@ -163,7 +213,7 @@ const AddSongDialog = () => {
               onChange={(e) =>
                 setNewSong({
                   ...newSong,
-                  duration: parseInt(e.target.value) || 0,
+                  duration: e.target.value || "0",
                 })
               }
               className="bg-zinc-800 border-zinc-700"
@@ -193,7 +243,19 @@ const AddSongDialog = () => {
             </Select>
           </div>
         </div>
-        
+
+        <DialogFooter>
+          <Button
+            variant={"outline"}
+            onClick={() => setSongDialogOpen(false)}
+            disabled={isLoading}
+          >
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit} disabled={isLoading}>
+            {isLoading ? "Uploading..." : "Add Song"}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
