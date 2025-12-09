@@ -11,6 +11,13 @@ import {
 import { Button } from "./ui/button";
 import { Plus, Upload } from "lucide-react";
 import { Input } from "./ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 const AddSongDialog = () => {
   const { albums } = useMusicStore();
@@ -20,7 +27,7 @@ const AddSongDialog = () => {
   const [newSong, setNewSong] = useState({
     title: "",
     artist: "",
-    album: undefined,
+    album: "",
     duration: 0,
   });
 
@@ -162,7 +169,31 @@ const AddSongDialog = () => {
               className="bg-zinc-800 border-zinc-700"
             />
           </div>
+
+          {/* Album selection */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Album (Optional)</label>
+            <Select
+              value={newSong.album}
+              onValueChange={(value) =>
+                setNewSong({ ...newSong, album: value })
+              }
+            >
+              <SelectTrigger className="bg-zinc-800 border-zinc-700">
+                <SelectValue placeholder="Select an album" />
+              </SelectTrigger>
+              <SelectContent className="bg-zinc-800 border-zinc-700">
+                <SelectItem value="none">No Album (single)</SelectItem>
+                {albums.map((album) => (
+                  <SelectItem key={album._id} value={album._id}>
+                    {album.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
+        
       </DialogContent>
     </Dialog>
   );
