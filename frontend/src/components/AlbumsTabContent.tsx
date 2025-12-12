@@ -1,7 +1,7 @@
 import { Library } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
 import AlbumsTable from "./AlbumsTable";
+import AddAlbumDialog from "./AddAlbumDialog";
 
 const AlbumsTabContent = () => {
   return (
@@ -15,7 +15,7 @@ const AlbumsTabContent = () => {
             </CardTitle>
             <CardDescription>Manage the album collection</CardDescription>
           </div>
-          <Button>+</Button>
+          <AddAlbumDialog />
         </div>
       </CardHeader>
       <CardContent>
