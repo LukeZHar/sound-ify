@@ -12,12 +12,16 @@ import adminRoutes from "./routes/admin.route.js";
 import songRoutes from "./routes/song.route.js";
 import albumRoutes from "./routes/albums.route.js";
 import statsRoutes from "./routes/stats.route.js";
+import { createServer } from "http";
 
 dotenv.config();
 
 const __dirname = path.resolve();
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+const httpServer = createServer(app);
+initializeSocket(httpServer);
 
 app.use(
   cors({
@@ -54,7 +58,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
   dbConnect();
 });
