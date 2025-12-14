@@ -5,12 +5,14 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Plus, Upload } from "lucide-react";
+import { Input } from "./ui/input";
 
 const AddAlbumDialog = () => {
   const [albumDialogOpen, setAlbumDialogOpen] = useState(false);
@@ -82,7 +84,7 @@ const AddAlbumDialog = () => {
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
-          <input
+          <Input
             type="file"
             ref={fileInputRef}
             onChange={handleImageSelect}
@@ -105,8 +107,64 @@ const AddAlbumDialog = () => {
               </Button>
             </div>
           </div>
-          <div></div>
+          <div className="space-y-2">
+            <label className="text-xs font-medium">Album title</label>
+            <Input
+              value={newAlbum.title}
+              onChange={(e) =>
+                setNewAlbum({ ...newAlbum, title: e.target.value })
+              }
+              className="bg-zinc-800 border-zinc-700"
+              placeholder="Album Title"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Artist</label>
+            <Input
+              value={newAlbum.artist}
+              onChange={(e) =>
+                setNewAlbum({ ...newAlbum, artist: e.target.value })
+              }
+              className="bg-zinc-800 border-zinc-700"
+              placeholder="Artist Name"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Release Year</label>
+            <Input
+              type="number"
+              value={newAlbum.releaseYear}
+              onChange={(e) =>
+                setNewAlbum({
+                  ...newAlbum,
+                  releaseYear: parseInt(e.target.value),
+                })
+              }
+              className="bg-zinc-800 border-zinc-700"
+              placeholder="Enter Release Year"
+              min={1900}
+              max={new Date().getFullYear()}
+            />
+          </div>
         </div>
+        <DialogFooter>
+          <Button
+            variant={"outline"}
+            onClick={() => setAlbumDialogOpen(false)}
+            disabled={isLoading}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            className="bg-violet-500 hover:bg-violet-600 text-white"
+            disabled={
+              isLoading || !imageFile || !newAlbum.title || !newAlbum.artist
+            }
+          >
+            {isLoading ? "Creating..." : "Create Album"}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
