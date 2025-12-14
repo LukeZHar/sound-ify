@@ -5,6 +5,8 @@ import dbConnect from "./lib/db.js";
 import { clerkMiddleware } from "@clerk/express";
 import fileUpload from "express-fileupload";
 import path from "path";
+import { createServer } from "http";
+import { initializeSocket } from "./lib/socket.js";
 
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
@@ -12,7 +14,6 @@ import adminRoutes from "./routes/admin.route.js";
 import songRoutes from "./routes/song.route.js";
 import albumRoutes from "./routes/albums.route.js";
 import statsRoutes from "./routes/stats.route.js";
-import { createServer } from "http";
 
 dotenv.config();
 
