@@ -12,7 +12,7 @@ const FriendsActivity = () => {
     if (user) fetchUsers();
   }, [fetchUsers, user]);
 
-  const isPlaying = true;
+  const isPlaying = false;
 
   return (
     <div className="h-full bg-zinc-900 rounded-lg flex flex-col">
@@ -53,10 +53,10 @@ const FriendsActivity = () => {
                   {isPlaying ? (
                     <div className="mt-1">
                       <div className="mt-1 text-sm text-white font-medium truncate">
-                        Cardigan
+                        Song
                       </div>
                       <div className="text-sm text-zinc-400 truncate">
-                        By Taylor Swift
+                        By Song
                       </div>
                     </div>
                   ) : (

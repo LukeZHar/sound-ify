@@ -1,6 +1,7 @@
 import { useChatStore } from "@/stores/useChatStore";
 import { ScrollArea } from "./ui/scroll-area";
 import UserListSkeleton from "./skeletons/UsersListSkeleton";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const UserList = () => {
   const { users, selectedUser, isLoading, setSelectedUser, onlineUsers } =
@@ -19,11 +20,31 @@ const UserList = () => {
                   key={user._id}
                   onClick={() => setSelectedUser(user)}
                   className={`flex items-center justify-center lg:justify-start gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
-                    selectedUser?.clerkId === chatUser.clerkId
+                    selectedUser?.clerkId === user.clerkId
                       ? "bg-zinc-800"
                       : "hover:bg-zinc-800/50"
                   }`}
-                ></div>
+                >
+                  <div className="relative">
+                    <Avatar className="size-8 md:size-12">
+                      <AvatarImage src={user.imageUrl} />
+                      <AvatarFallback>{user.fullName[0]}</AvatarFallback>
+                    </Avatar>
+                    {/* Online indicator */}
+                    <div
+                      className={`absolute bottom-0 right-0 size-3 rounded-full ring-2 ring-zinc-900 ${
+                        onlineUsers.has(user.clerkId)
+                          ? "bg-green-500"
+                          : "bg-zinc-500"
+                      }`}
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0 lg:block hidden">
+                    <span className="font-medium truncate">
+                      {user.fullName}
+                    </span>
+                  </div>
+                </div>
               ))
             )}
           </div>
