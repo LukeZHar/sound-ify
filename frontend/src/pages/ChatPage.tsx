@@ -1,4 +1,5 @@
 import ChatHeader from "@/components/ChatHeader";
+import MessageInput from "@/components/MessageInput";
 import Topbar from "@/components/Topbar";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -6,6 +7,14 @@ import UserList from "@/components/UserList";
 import { useChatStore } from "@/stores/useChatStore";
 import { useUser } from "@clerk/clerk-react";
 import { useEffect } from "react";
+
+const formatTime = (date: string) => {
+  return new Date(date).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+};
 
 const ChatPage = () => {
   const { user } = useUser();
@@ -57,13 +66,14 @@ const ChatPage = () => {
                       >
                         <p className="text-sm">{message.content}</p>
                         <span className="text-xs text-zinc-300 mt-1 block">
-                          {message.createdAt.toLocaleString()}
+                          {formatTime(message.createdAt)}
                         </span>
                       </div>
                     </div>
                   ))}
                 </div>
               </ScrollArea>
+              <MessageInput />
             </>
           ) : (
             <NoConversationSelected />
