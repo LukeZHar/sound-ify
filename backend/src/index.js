@@ -33,6 +33,10 @@ app.use(
 app.use(express.json()); // Middleware to parse JSON request bodies
 app.use(clerkMiddleware()); // This will add Clerk authentication to req obj
 
+// CRON jobs would be set up here jobs
+// reset tmp files daily at midnight
+
+
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -50,6 +54,13 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/songs", songRoutes);
 app.use("/api/albums", albumRoutes);
 app.use("/api/stats", statsRoutes);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend/dist/index.html"));
+  });
+}
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
