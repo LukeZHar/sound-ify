@@ -7,6 +7,8 @@ import fileUpload from "express-fileupload";
 import path from "path";
 import { createServer } from "http";
 import { initializeSocket } from "./lib/socket.js";
+import cron from "node-cron";
+import fs from "fs";
 
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
@@ -36,7 +38,6 @@ app.use(clerkMiddleware()); // This will add Clerk authentication to req obj
 // CRON jobs would be set up here jobs
 // reset tmp files daily at midnight
 
-
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -47,6 +48,22 @@ app.use(
     },
   })
 );
+
+const tempDir = path.join(process.cwd(), "tmp");
+// Cron jobs
+cron.schedule("0 0 * * *", () => {
+  if (fs.existsSync(tempDir)) {
+    fs.readdir(tempDir, (err, files) => {
+      if (err) {
+        console.log("Error reading temp directory:", err);
+        return;
+      }
+      for (const file of files) {
+        fs.unlink(path.join(tempDir, file), (err) => {});
+      }
+    });
+  }
+});
 
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
@@ -74,5 +91,3 @@ httpServer.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
   dbConnect();
 });
-
-// TODO: Socket.io integration for real-time features
