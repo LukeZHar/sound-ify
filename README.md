@@ -86,9 +86,9 @@ npm start
 
 ## 🔗 Links
 
-- **Live App**: [Coming Soon]
+- **Live App**: https://sound-ify.onrender.com/
 - **GitHub**: https://github.com/LukeZHar/sound-ify
-- **Demo Video**: [Coming Soon]
+- **Demo Video**: https://youtu.be/VD5vZyv-fpo?si=h-QDoROCLNWGdEJj
 
 ## 🏗️ Project Structure
 
